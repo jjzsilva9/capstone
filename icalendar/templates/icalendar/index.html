@@ -1,0 +1,26 @@
+{% extends "icalendar/layout.html" %}
+{% load static %}
+{% block body %}
+<br>
+<h2>This Month</h2>
+<div class="container bg-light border">
+    <div class="row days">
+        <div class="col border">Monday</div>
+        <div class="col border-top border-bottom">Tuesday</div>
+        <div class="col border">Wednesday</div>
+        <div class="col border-top border-bottom">Thursday</div>
+        <div class="col border">Friday</div>
+        <div class="col border-top border-bottom">Saturday</div>
+        <div class="col border">Sunday</div>
+    </div>
+    <div class="row week1">
+        <div class="day container col border"></div>
+        <div class="day container col border-top border-bottom"></div>
+        <div class="day container col border"></div>
+        <div class="day container col border-top border-bottom"></div>
+        <div class="day container col border"></div>
+        <div class="day container col border-top border-bottom"></div>
+        <div class="day container col border"></div>
+    </div>
+</div>
+{% endblock %}

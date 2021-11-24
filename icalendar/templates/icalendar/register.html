@@ -1,0 +1,23 @@
+{% extends "icalendar/layout.html" %}
+
+{% block body %}
+<br>
+<h2 class="my-4">Register a Profile</h2>
+<form action="http://127.0.0.1:8000/register/" method="POST">
+    <input type="hidden" name="csrfmiddlewaretoken" value="OC5Ig6wUukN1dPcDKdXOYwH2Zr5LN0roxDp8ogoR6xi6134J7D5Rcp2fjqMsuq9t">
+    <div class="form-group col-md-6 my-2">
+        <label for="username">Username</label>
+        <input type="text" class="form-control my-1" id="username" placeholder="Enter username">
+    </div>
+    <div class="form-group col-md-6 my-2">
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control my-1" id="email" placeholder="Enter email">
+    </div>
+    <div class="form-group col-md-6 my-2">
+        <label for="password">Password</label>
+        <input type="password" class="form-control my-1" id="password" placeholder="Enter password">
+        <input type="password" class="form-control my-2" id="confirmation" placeholder="Confirm password">
+    </div>
+    <button type="submit" class="btn btn-secondary my-2">Submit</button>
+</form>
+{% endblock %}
