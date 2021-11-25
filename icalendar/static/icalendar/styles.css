@@ -1,7 +1,15 @@
 .day {
-    height:200px;
+    aspect-ratio: 1/1;
+    background-color:whitesmoke;
+    border:solid lightgrey 1px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 2px;
 }
 
-h2 {
-    color: red;
+.day-of-week > .col {
+    aspect-ratio: 6/1;
+    border:solid lightgrey 1px;
+    color: white;
 }
