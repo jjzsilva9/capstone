@@ -1,9 +1,9 @@
-{% extends "icalendar/layout.html" %}
+{% extends 'icalendar/layout.html' %}
 
 {% block body %}
 <br>
-<h2 class="my-4">Register a Profile</h2>
-<form action="{% url 'register' %}" method="POST">
+<h2 class="my-4">Sign in</h2>
+<form action="{% url 'login' %}" method="POST">
     {% csrf_token %}
     <div class="form-group col-md-6 my-2">
         <label for="username">Username</label>
@@ -16,7 +16,6 @@
     <div class="form-group col-md-6 my-2">
         <label for="password">Password</label>
         <input type="password" name="password" class="form-control my-1" id="password" placeholder="Enter password">
-        <input type="password" name="password2" class="form-control my-2" id="confirmation" placeholder="Confirm password">
     </div>
     <button type="submit" class="btn btn-secondary my-2">Submit</button>
 </form>

@@ -9,16 +9,26 @@
     <title>{% block title %}Calendar{% endblock %}</title>
 </head>
 <body>
-    <nav class="navbar sticky-top navbar-dark bg-dark px-100">
+    <nav class="navbar sticky-top navbar-dark bg-dark px-100 noselect">
       <div class="container-fluid justify-content-start offset-md-1">
         <div class="navbar-header">
-          <a class="navbar-brand" href="http://127.0.0.1:8000/register/#">Calendar</a>
+          <a class="navbar-brand">Calendar</a>
         </div>
         <ul class="navbar-nav flex-row p-2">
           <li class="nav-item p-2"><a class="nav-link {% if nbar == 'home' %}active{% endif %}" href="{% url 'index' %}">Home</a></li>
           <li class="nav-item p-2"><a class="nav-link {% if nbar == 'features' %}active{% endif %}" href="#">Features</a></li>
-          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'profile' %}active{% endif %}" href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'register' %}{% endif %}">Profile</a></li>
         </ul>
+        {% if user.is_authenticated %}
+        <div class="navbar-header justify-content-end">
+          <a class="navbar-brand"><strong>{{ user.username }}</strong></a>
+          <a id="logout" class="navbar-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+        {% else %}
+        <ul class="navbar-nav flex-row p-2">
+          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'register' %}active{% endif %}" href="{% url 'register' %}">Register</a></li>
+        </ul>
+        {% endif %}
       </div>
     </nav>
     

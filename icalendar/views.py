@@ -13,13 +13,27 @@ def index(request):
         "nbar": "home"
     })
 
-def login(request):
+def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-    return render(request, 'icalendar/index.html')
 
-def logout(request):
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "icalendar/login.html", {
+                "message": "Invalid username or password",
+                "nbar":"login"
+            })
+    else:
+        return render(request, 'icalendar/login.html', {
+            "nbar": "login"
+        })
+
+def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
@@ -40,6 +54,7 @@ def register (request):
             user.save()
         except IntegrityError:
             return render(request, "icalendar/register.html", {
+                "nbar": "register",
                 "message": "Username already taken."
             })
         login(request, user)
@@ -48,8 +63,3 @@ def register (request):
         return render(request, "icalendar/register.html", {
             "nbar": "profile"
         })
-
-def profile(request):
-    return render(request, 'icalendar/index.html', {
-        "nbar": "profile"
-    })
