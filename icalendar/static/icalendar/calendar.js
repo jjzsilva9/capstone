@@ -4,6 +4,20 @@ document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
     updateMonth(date);
 
+    $('#eventModal').modal({
+        keyboard: true,
+        backdrop: false,
+        focus: true,
+        show: true
+    });
+
+    $('#eventModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var day = button.innerText;
+        var modal = $(this);
+        modal.find('.modal-day').text(day);
+
+    })
     document.querySelector('#nextMonth').onclick = function(){
         date.setMonth(date.getMonth()+1);
         updateMonth(date);
@@ -22,8 +36,9 @@ function updateMonth(date){
     
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
-        day.setAttribute("data-toggle", "modal");
-        day.setAttribute("data-target", "#eventModal");
+        day.onclick = function (){
+            $('#eventModal').modal('show');
+        }
         day.innerText = day.id - firstDay;
         day.style.color = "black"
         if (day.innerText < 1){
