@@ -22,6 +22,8 @@ function updateMonth(date){
     
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
+        day.setAttribute("data-toggle", "modal");
+        day.setAttribute("data-target", "#eventModal");
         day.innerText = day.id - firstDay;
         day.style.color = "black"
         if (day.innerText < 1){
