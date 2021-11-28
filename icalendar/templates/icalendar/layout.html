@@ -7,26 +7,27 @@
     <link href="{% static 'icalendar/styles.css' %}" rel="stylesheet">
     <script src="{% static 'icalendar/calendar.js' %}"></script>
     <title>{% block title %}Calendar{% endblock %}</title>
+    {% block script %}
+    {% endblock %}
 </head>
 <body>
     <nav class="navbar sticky-top navbar-dark bg-dark px-100 noselect">
-      <div class="container-fluid justify-content-start offset-md-1">
-        <div class="navbar-header">
+      <div class="container align-middle">
+        <div class="col navbar-header">
           <a class="navbar-brand">Calendar</a>
+          <a class="btn btn-primary {% if nbar == 'home' %}active{% endif %}" href="{% url 'index' %}">Home</a>
+          <a class="btn btn-primary {% if nbar == 'features' %}active{% endif %}" href="#">Features</a>
         </div>
-        <ul class="navbar-nav flex-row p-2">
-          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'home' %}active{% endif %}" href="{% url 'index' %}">Home</a></li>
-          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'features' %}active{% endif %}" href="#">Features</a></li>
-        </ul>
+        
         {% if user.is_authenticated %}
-        <div class="navbar-header justify-content-end">
+        <div class="navbar-header" id="profileInfo">
+          <a id="logoutButton" class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
           <a class="navbar-brand"><strong>{{ user.username }}</strong></a>
-          <a id="logout" class="navbar-link" href="{% url 'logout' %}">Logout</a>
         </div>
         {% else %}
-        <ul class="navbar-nav flex-row p-2">
-          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a></li>
-          <li class="nav-item p-2"><a class="nav-link {% if nbar == 'register' %}active{% endif %}" href="{% url 'register' %}">Register</a></li>
+        <div class="navbar-header" id="loginButtons">
+          <a class="btn btn-primary {% if nbar == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+          <a class="btn btn-primary {% if nbar == 'register' %}active{% endif %}" href="{% url 'register' %}">Register</a>
         </ul>
         {% endif %}
       </div>

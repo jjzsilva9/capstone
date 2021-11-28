@@ -37,6 +37,10 @@
                                     supported by Chrome, Edge, Opera and Firefox */
   }
 
-  #monthButtons {
+  /*#monthButtons {
       justify-content:end;
+  }*/
+
+  #logoutButton {
+      margin-right: 10px;
   }
