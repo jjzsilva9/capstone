@@ -9,8 +9,13 @@ from .models import User
 # Create your views here.
 
 def index(request):
+    if request.user.is_authenticated:
+        users = User.objects.exclude(username=request.user.username)
+    else:
+        users = User.objects.all()
     return render(request, 'icalendar/index.html', {
-        "nbar": "home"
+        "nbar": "home",
+        "users": users
     })
 
 def login_view(request):
@@ -63,3 +68,9 @@ def register (request):
         return render(request, "icalendar/register.html", {
             "nbar": "register"
         })
+
+def post(request):
+    if request.method == "POST":
+
+    else:
+        return

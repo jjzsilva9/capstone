@@ -38,6 +38,9 @@ function updateMonth(date){
     document.querySelectorAll('.day').forEach(day => {
         day.onclick = function (){
             $('#eventModal').modal('show');
+            $('.close').click(function() {
+                $('#eventModal').modal('hide');
+            })
         }
         day.innerText = day.id - firstDay;
         day.style.color = "black"

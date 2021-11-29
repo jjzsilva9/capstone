@@ -87,35 +87,51 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="eventForm">
+          {% if user.is_authenticated %}
+          <form id="eventForm" action="{% url 'index' %}" method="POST">
+            {% csrf_token %}
             <div class="form-group">
               <label for="title" class="col-form-label">Title:</label>
-              <input type="text" class="form-control" id="title">
+              <input type="text" class="form-control" id="title" name="title">
             </div>
             <div class="form-group">
               <label for="description" class="col-form-label">Description:</label>
-              <textarea class="form-control" id="message-text"></textarea>
+              <textarea class="form-control" id="message-text" name="description"></textarea>
             </div>
             <div class="form-group">
               <label for="start-time" class="col-form-label">Start Time:</label>
-              <input type="time" class="form-control" id="start-time"></input>
+              <input type="time" class="form-control" id="start-time" name="start-time"></input>
               <label for="end-time" class="col-form-label">End Time:</label>
-              <input type="time" class="form-control" id="end-time"></input>
+              <input type="time" class="form-control" id="end-time" name="end-time"></input>
             </div>
             <div class="form-group">
               <label for="day" class="col-form-label">Day:</label>
-              <input type="date" class="form-control" id="day"></input>
+              <input type="date" class="form-control" id="day" name="day"></input>
             </div>
             <br>
             <div class="form-check">
               <label for="task" class="form-check-label">Task</label>
-              <input type="checkbox" class="form-check-input" id="task"></input>
+              <input type="checkbox" class="form-check-input" id="task" name="task"></input>
+            </div>
+            <div class="form-group">
+              <label for="users" class="col-form-label">Other Users:</label>
+              <select class="custom-select select" multiple id="users" name="users">
+                {% for account in users %}
+                <option value="{{account.id}}">{{account.username}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="close btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          {% else %}
+          <h2>Please sign in to create events</h2>
+          <br>
+          <a class="btn btn-primary {% if nbar == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+          <a class="btn btn-primary {% if nbar == 'register' %}active{% endif %}" href="{% url 'register' %}">Register</a>
+          {% endif %}
         </div>
       </div>
     </div>

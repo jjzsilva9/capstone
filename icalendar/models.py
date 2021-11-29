@@ -7,4 +7,4 @@ class Event(models.Model):
     endtime = models.DateTimeField(auto_now_add=False)
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
-    user = models.ManyToManyField(User)
+    users = models.ManyToManyField(User)
