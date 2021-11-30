@@ -7,4 +7,5 @@ class Event(models.Model):
     endtime = models.DateTimeField(auto_now_add=False)
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name="additional_users")
+    host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")

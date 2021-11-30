@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
 
-from .models import User
+from .models import User, Event
 
 # Create your views here.
 
@@ -71,6 +71,21 @@ def register (request):
 
 def post(request):
     if request.method == "POST":
+        title = request.POST["title"]
+        description = request.POST["description"]
+        start_time = request.POST["start-time"]
+        end_time = request.POST["end-time"]
+        date = request.POST["date"]
+        users = request.POST["users"]
+        host = request.POST["host"]
 
+        try:
+            event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host)
+        except IntegrityError:
+            return render(request, "icalendar/index.html", {
+                "nbar": "home",
+                "users": users,
+                "message": "Post already exists"
+            })
     else:
-        return
+        return HttpResponseRedirect(reverse("index"))

@@ -18,19 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.find('.modal-day').text(day);
 
     })
-    document.querySelector('#nextMonth').onclick = function(){
+    $('#nextMonth').click(function(){
         date.setMonth(date.getMonth()+1);
         updateMonth(date);
-    }
-    document.querySelector('#prevMonth').onclick = function(){
+    })
+    $('#prevMonth').click(function(){
         date.setMonth(date.getMonth()-1);
         updateMonth(date);
-    }
+    })
 })
 
 function updateMonth(date){
     let month = date.getUTCMonth();
-    document.querySelector('#thisMonth').innerText = months[month] + ' ' + date.getFullYear();
+    $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
+    //$('#date').val(date);
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     
