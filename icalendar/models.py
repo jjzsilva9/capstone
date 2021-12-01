@@ -8,4 +8,5 @@ class Event(models.Model):
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
     users = models.ManyToManyField(User, related_name="additional_users")
+    task = models.BooleanField()
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")

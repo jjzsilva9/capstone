@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
+import datetime
 
 from .models import User, Event
 
@@ -76,11 +77,14 @@ def post(request):
         start_time = request.POST["start-time"]
         end_time = request.POST["end-time"]
         date = request.POST["date"]
+        task = request.POST["task"]
         users = request.POST["users"]
         host = request.POST["host"]
 
+        start_time = datetime.datetime(date)
+        print(start_time)
         try:
-            event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host)
+            event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host, task=task)
         except IntegrityError:
             return render(request, "icalendar/index.html", {
                 "nbar": "home",

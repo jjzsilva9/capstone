@@ -13,9 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     $('#eventModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
-        var day = button.innerText;
-        var modal = $(this);
-        modal.find('.modal-day').text(day);
 
     })
     $('#nextMonth').click(function(){
@@ -31,18 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
 function updateMonth(date){
     let month = date.getUTCMonth();
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
-    //$('#date').val(date);
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
-        day.onclick = function (){
-            $('#eventModal').modal('show');
-            $('.close').click(function() {
-                $('#eventModal').modal('hide');
-            })
-        }
         day.innerText = day.id - firstDay;
         day.style.color = "black"
         if (day.innerText < 1){
@@ -51,6 +41,15 @@ function updateMonth(date){
         } else if (day.innerText > lastDay){
             day.innerText = day.innerText - lastDay;
             day.style.color = "lightgrey";
+        } else {
+            day.onclick = function (){
+                $('#eventModal').modal('show');
+                document.getElementById("date").defaultValue = this.dataset.whatever;
+                $('.close').click(function() {
+                    $('#eventModal').modal('hide');
+                })
+            }
         }
+        day.setAttribute("data-whatever", `${date.getFullYear()}-${parseInt(("0"+ date.getUTCMonth()).slice(-2))+1}-${("0"+day.innerText).slice(-2)}`);
     });
 }
