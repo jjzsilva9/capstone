@@ -77,11 +77,15 @@ def post(request):
         start_time = request.POST["start-time"]
         end_time = request.POST["end-time"]
         date = request.POST["date"]
-        task = request.POST["task"]
+        try:
+            task = request.POST["task"]
+        except:
+            task = False
         users = request.POST["users"]
         host = request.POST["host"]
 
-        start_time = datetime.datetime(date)
+        start_time = datetime.datetime(date, start_time)
+        end_time = datetime.datetime(date, end_time)
         print(start_time)
         try:
             event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host, task=task)
@@ -89,7 +93,7 @@ def post(request):
             return render(request, "icalendar/index.html", {
                 "nbar": "home",
                 "users": users,
-                "message": "Post already exists"
+                "message": "Exact Post already exists"
             })
     else:
         return HttpResponseRedirect(reverse("index"))
