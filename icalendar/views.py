@@ -81,11 +81,15 @@ def post(request):
             task = request.POST["task"]
         except:
             task = False
-        users = request.POST["users"]
+        try:
+            users = request.POST["users"]
+        except:
+            users = []
         host = request.POST["host"]
+        host = User.objects.get(id=host)
 
-        start_time = datetime.datetime(date, start_time)
-        end_time = datetime.datetime(date, end_time)
+        #start_time = datetime.datetime(date, start_time)
+        #end_time = datetime.datetime(date, end_time)
         print(start_time)
         try:
             event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host, task=task)
