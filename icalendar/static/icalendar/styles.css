@@ -37,14 +37,21 @@
                                     supported by Chrome, Edge, Opera and Firefox */
   }
 
-  /*#monthButtons {
-      justify-content:end;
-  }*/
+/*#monthButtons {
+    justify-content:end;
+}*/
 
-  #logoutButton {
-      margin-right: 10px;
-  }
 
-  .select {
-      width: 150px;
-  }
+
+#logoutButton {
+    margin-right: 10px;
+}
+
+.select {
+  width: 150px;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: 
