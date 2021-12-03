@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
 import datetime
+from django.http.response import JsonResponse
 
 from .models import User, Event
 
@@ -93,6 +94,12 @@ def post(request):
         
         event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, host=host, task=task)
         event.save()
-        for user in users:
-            event.users.add(User.objects.get(user))
+        for account in users:
+            user = User.objects.get(id=account)
+            event.users.add(user)
     return HttpResponseRedirect(reverse("index"))
+
+def events(request, month):
+    events = Event.objects.filter(starttime__month=month)
+    print(events)
+    return JsonResponse([event.serialize() for event in events], safe=False)

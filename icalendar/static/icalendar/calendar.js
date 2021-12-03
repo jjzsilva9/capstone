@@ -1,6 +1,7 @@
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let current = new Date();
+console.log(current.getUTCMonth());
 document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
     updateMonth(date);
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function updateMonth(date){
+    fetchEvents(date);
     let month = date.getUTCMonth();
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -38,13 +40,16 @@ function updateMonth(date){
         if (day.innerText < 1){
             day.innerText =  Number(lastDayPrev) + Number(day.innerText);
             day.style.color = "lightgrey";
+            day.classList.add('noselect');
         } else if (day.innerText > lastDay){
             day.innerText = day.innerText - lastDay;
             day.style.color = "lightgrey";
         } else {
+            day.setAttribute("data-whatever", `${date.getFullYear()}-${("0"+(date.getUTCMonth()+1)).slice(-2)}-${("0"+day.innerText).slice(-2)}`);
             day.style.color = "black";
-            if (month === current.getUTCMonth() && day.innerText === current.getDate()){
-                day.innerHTML = `<span class="dot primary">` + day.innerText + `</span>`;
+            if ((month == current.getUTCMonth()+1) && day.innerText == current.getDate()){
+                console.log(day);
+                day.innerText = `<span class="dot primary">` + day.innerText + `</span>`;
             }
             day.onclick = function (){
                 $('#eventModal').modal('show');
@@ -54,6 +59,17 @@ function updateMonth(date){
                 })
             }
         }
-        day.setAttribute("data-whatever", `${date.getFullYear()}-${parseInt(("0"+ date.getUTCMonth()).slice(-2))+1}-${("0"+day.innerText).slice(-2)}`);
     });
+}
+
+function fetchEvents(date){
+    fetch(`/events/${parseInt(date.getUTCMonth())+1}`)
+    .then(response => response.json())
+    .then(events => {
+        events.forEach(loadEvent);
+    })
+}
+
+function loadEvent(content) {
+    console.log(content)
 }

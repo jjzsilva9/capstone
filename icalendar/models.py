@@ -10,3 +10,15 @@ class Event(models.Model):
     users = models.ManyToManyField(User, related_name="additional_users")
     task = models.BooleanField()
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "starttime": self.starttime,
+            "endtime": self.endtime,
+            "title": self.title,
+            "description": self.description,
+            "users": [user.username for user in self.users.all()],
+            "task": self.task,
+            "host": self.host.username
+        }
