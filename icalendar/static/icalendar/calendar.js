@@ -1,7 +1,7 @@
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+let current = new Date();
 document.addEventListener("DOMContentLoaded", function () {
-    let current = new Date();
     let date = new Date();
     updateMonth(date);
 
@@ -44,7 +44,7 @@ function updateMonth(date){
         } else {
             day.style.color = "black";
             if (month === current.getUTCMonth() && day.innerText === current.getDate()){
-                day.innerHTML = "<span class="dot primary">" + day.innerText + "</span>";
+                day.innerHTML = `<span class="dot primary">` + day.innerText + `</span>`;
             }
             day.onclick = function (){
                 $('#eventModal').modal('show');
