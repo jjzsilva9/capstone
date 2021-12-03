@@ -1,6 +1,7 @@
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 document.addEventListener("DOMContentLoaded", function () {
+    let current = new Date();
     let date = new Date();
     updateMonth(date);
 
@@ -34,7 +35,6 @@ function updateMonth(date){
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
         day.innerText = day.id - firstDay;
-        day.style.color = "black"
         if (day.innerText < 1){
             day.innerText =  Number(lastDayPrev) + Number(day.innerText);
             day.style.color = "lightgrey";
@@ -42,6 +42,10 @@ function updateMonth(date){
             day.innerText = day.innerText - lastDay;
             day.style.color = "lightgrey";
         } else {
+            day.style.color = "black";
+            if (month === current.getUTCMonth() && day.innerText === current.getDate()){
+                day.innerHTML = "<span class="dot primary">" + day.innerText + "</span>";
+            }
             day.onclick = function (){
                 $('#eventModal').modal('show');
                 document.getElementById("date").defaultValue = this.dataset.whatever;
