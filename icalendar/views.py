@@ -88,16 +88,15 @@ def post(request):
         host = request.POST["host"]
         host = User.objects.get(id=host)
 
-        #start_time = datetime.datetime(date, start_time)
-        #end_time = datetime.datetime(date, end_time)
+        start_time = datetime.datetime(date[0:4], date[5:7], date[8:10], start_time[0:2], start_time[3:5])
+        end_time = datetime.datetime(date[0:4], date[5:7], date[8:10], end_time[0:2], end_time[3:5])
         print(start_time)
-        try:
-            event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host, task=task)
-        except IntegrityError:
-            return render(request, "icalendar/index.html", {
-                "nbar": "home",
-                "users": users,
-                "message": "Exact Post already exists"
-            })
+        
+        event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, users=users, host=host, task=task)
+        event.save()
+        return render(request, "icalendar/index.html", {
+            "nbar": "home",
+            "users": users
+        })
     else:
         return HttpResponseRedirect(reverse("index"))
