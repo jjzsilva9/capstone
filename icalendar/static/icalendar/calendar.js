@@ -36,7 +36,7 @@ function updateMonth(date){
     
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
-        day.innerText = day.id - firstDay;
+        day.innerHTML = `<p class="row align-items-start justify-content-center">${day.id - firstDay}</p>`;
         if (day.innerText < 1){
             day.innerText =  Number(lastDayPrev) + Number(day.innerText);
             day.style.color = "lightgrey";
@@ -73,16 +73,20 @@ function fetchEvents(date){
 function loadEvent(content) {
     console.log(content)
     const event = document.createElement("button");
-    event.className="event";
-    event.innerHTML = `<p id="title">${content.title}</p>`;
+    event.className="event row align-items-center";
+    event.innerHTML = `<p class="event-title">${content.title}</p>`;
     event.id = content.id;
 
     event.onclick = function(){
         $('#eventDetailsModal').modal('show');
+        $('#eventModal').modal('hide');
         var modal = $('#eventDetailsModal');
-        modal.find('.modal-title').text(content.title)
-        modal.find('.modal-description').text(content.description)
-        modal.find('.modal-starttime').text(content.starttime)
-        modal.find('.modal-endtime').text(content.endtime)
+        modal.find('.modal-title').text(content.title);
+        modal.find('.modal-description').text(content.description);
+        modal.find('.modal-starttime').text(content.starttime);
+        modal.find('.modal-endtime').text(content.endtime);
     }
+
+    $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).append(`<br>`);
+    $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).find("table").append(event);
 }
