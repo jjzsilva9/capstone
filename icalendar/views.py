@@ -100,6 +100,8 @@ def post(request):
     return HttpResponseRedirect(reverse("index"))
 
 def events(request, month):
+    user = User.objects.filter(username=request.user.username)
     events = Event.objects.filter(starttime__month=month)
-    print(events)
-    return JsonResponse([event.serialize() for event in events], safe=False)
+    list = [event for event in events if (event.host==user or user in event.users)]
+    print(list)
+    return JsonResponse([event.serialize() for event in list], safe=False)
