@@ -18,7 +18,7 @@ class Event(models.Model):
             "endtime": self.endtime,
             "title": self.title,
             "description": self.description,
-            "users": [user.username for user in self.users.all()],
+            "users": [f"{user.id}, {user.username}" for user in self.users.all()],
             "task": self.task,
             "host": self.host.username
         }

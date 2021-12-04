@@ -72,4 +72,17 @@ function fetchEvents(date){
 
 function loadEvent(content) {
     console.log(content)
+    const event = document.createElement("button");
+    event.className="event";
+    event.innerHTML = `<p id="title">${content.title}</p>`;
+    event.id = content.id;
+
+    event.onclick = function(){
+        $('#eventDetailsModal').modal('show');
+        var modal = $('#eventDetailsModal');
+        modal.find('.modal-title').text(content.title)
+        modal.find('.modal-description').text(content.description)
+        modal.find('.modal-starttime').text(content.starttime)
+        modal.find('.modal-endtime').text(content.endtime)
+    }
 }
