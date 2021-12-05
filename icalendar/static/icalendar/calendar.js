@@ -86,12 +86,36 @@ function loadEvent(content) {
 
     event.onclick = function(){
         $('#eventDetailsModal').modal('show');
-        $('#eventModal').modal('hide');
         var modal = $('#eventDetailsModal');
         modal.find('.modal-title').text(content.title);
         modal.find('.modal-description').text(content.description);
         modal.find('.modal-starttime').text(content.starttime);
         modal.find('.modal-endtime').text(content.endtime);
+        if (content.task == true){
+            modal.find('.modal-taskcompleted').show();
+            modal.find('.modal-taskcompleted').val(content.taskcompleted);
+            modal.find('.modal-taskcompleted').addEventListener('change', function() {
+                if (this.checked){
+                    fetch(`/post`, {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            post: content.id,
+                            taskcompleted: true
+                        })
+                    })
+                } else {
+                    fetch(`/post`, {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            post: content.id,
+                            taskcompleted: false
+                        })
+                    })
+                }
+            })
+        } else {
+            modal.find('.modal-taskcompleted').hide();
+        }
         $('.close').click(function() {
             $('#eventDetailsModal').modal('hide');
         })

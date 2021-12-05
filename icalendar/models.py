@@ -9,6 +9,7 @@ class Event(models.Model):
     description = models.CharField(max_length=128)
     users = models.ManyToManyField(User, related_name="additional_users")
     task = models.BooleanField()
+    taskcompleted = models.BooleanField(default=False)
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")
 
     def serialize(self):
@@ -20,5 +21,6 @@ class Event(models.Model):
             "description": self.description,
             "users": [f"{user.id}, {user.username}" for user in self.users.all()],
             "task": self.task,
+            "taskcompleted": self.taskcompleted,
             "host": self.host.username
         }

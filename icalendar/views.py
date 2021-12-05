@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.db import IntegrityError
 import datetime
 from django.http.response import JsonResponse
+import json
 
 from .models import User, Event
 
@@ -97,7 +98,17 @@ def post(request):
         for account in users:
             user = User.objects.get(id=account)
             event.users.add(user)
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        event = Event.objects.get(id=data.get("post"))
+        if data.get("taskcompleted"):
+            event.taskcompleted = True
+        else:
+            event.taskcompleted = False
+        event.save()
     return HttpResponseRedirect(reverse("index"))
+    
+
 
 def events(request, month):
     user = User.objects.get(id=request.user.id)
@@ -107,6 +118,9 @@ def events(request, month):
     for event in list:
         if event["host"] == user.username:
             total.append(event)
-        elif user in event["users"]:
-            total.append(event)
+        elif len(event["users"]):
+            if str(user.id) in event["users"][0]:
+                total.append(event)
     return JsonResponse(total, safe=False)
+    
+
