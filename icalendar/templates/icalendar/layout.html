@@ -17,7 +17,6 @@
         <div class="col navbar-header">
           <a class="navbar-brand">Calendar</a>
           <a class="btn btn-primary {% if nbar == 'home' %}active{% endif %}" href="{% url 'index' %}">Home</a>
-          <a class="btn btn-primary {% if nbar == 'features' %}active{% endif %}" href="#">Features</a>
         </div>
         
         {% if user.is_authenticated %}

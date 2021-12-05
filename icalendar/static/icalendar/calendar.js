@@ -63,11 +63,13 @@ function updateMonth(date){
                 console.log(day);
             }
             day.onclick = function (){
-                $('#eventModal').modal('show');
-                document.getElementById("date").defaultValue = this.dataset.whatever;
-                $('.close').click(function() {
-                    $('#eventModal').modal('hide');
-                })
+                if (handleClick(this) === 1){
+                    $('#eventModal').modal('show');
+                    document.getElementById("date").defaultValue = this.dataset.whatever;
+                    $('.close').click(function() {
+                        $('#eventModal').modal('hide');
+                    })
+                };     
             }
         }
     });
@@ -89,47 +91,61 @@ function loadEvent(content) {
     event.id = content.id;
 
     event.onclick = function(){
-        $('#eventDetailsModal').modal('show');
-        var modal = $('#eventDetailsModal');
-        modal.find('.modal-title').text(content.title);
-        modal.find('.modal-description').text(content.description);
-        modal.find('.modal-starttime').text(String(content.starttime).slice(11, 16));
-        modal.find('.modal-endtime').text(String(content.endtime).slice(11, 16));
-        if (content.task == true){
-            modal.find('#taskcompletedlabel').show();
-            $('.modal-taskcompleted').show();
-            $('.modal-taskcompleted').val(content.taskcompleted);
-            $('#taskcompleted').on('change', function() {
-                console.log("task completed status changed");
-                if (this.checked){
-                    fetch(`/post`, {
-                        method: "PUT",
-                        body: JSON.stringify({
-                            post: content.id,
-                            taskcompleted: true
+        if (handleClick(this) === 0){
+
+            $('#eventDetailsModal').modal('show');
+            var modal = $('#eventDetailsModal');
+            modal.find('.modal-title').text(content.title);
+            modal.find('.modal-description').text(content.description);
+            modal.find('.modal-starttime').text(String(content.starttime).slice(11, 16));
+            modal.find('.modal-endtime').text(String(content.endtime).slice(11, 16));
+            if (content.task == true){
+                modal.find('#taskcompletedlabel').show();
+                $('.modal-taskcompleted').show();
+                $('.modal-taskcompleted').prop('checked', content.taskcompleted);
+                $('#taskcompleted').on('change', function() {
+                    console.log("task completed status changed");
+                    if (this.checked){
+                        fetch(`/task`, {
+                            method: "PUT",
+                            body: JSON.stringify({
+                                post: content.id,
+                                taskcompleted: true
+                            })
                         })
-                    })
-                } else {
-                    fetch(`/post`, {
-                        method: "PUT",
-                        body: JSON.stringify({
-                            post: content.id,
-                            taskcompleted: false
+                        content.taskcompleted = true;
+                    } else {
+                        fetch(`/task`, {
+                            method: "PUT",
+                            body: JSON.stringify({
+                                post: content.id,
+                                taskcompleted: false
+                            })
                         })
-                    })
-                }
+                        content.taskcompleted = false;
+                    }
+                })
+            } else {
+                modal.find('.modal-taskcompleted').hide();
+                modal.find('#taskcompletedlabel').hide();
+            }
+            $('.close').click(function() {
+                $('#eventDetailsModal').modal('hide');
             })
-        } else {
-            modal.find('.modal-taskcompleted').hide();
-            modal.find('#taskcompletedlabel').hide();
         }
-        $('.close').click(function() {
-            $('#eventDetailsModal').modal('hide');
-        })
     }
     $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).find("table").append(event);
 }
 
 function removeEvents(){
     $('.event').remove();
+}
+
+function handleClick(object) {
+    console.log(object.class);
+    if (object.classList.contains('day')){
+        return 1;
+    } else {
+        return 0;
+    }
 }

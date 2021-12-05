@@ -6,6 +6,7 @@ from django.db import IntegrityError
 import datetime
 from django.http.response import JsonResponse
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Event
 
@@ -98,14 +99,6 @@ def post(request):
         for account in users:
             user = User.objects.get(id=account)
             event.users.add(user)
-    elif request.method == "PUT":
-        data = json.loads(request.body)
-        event = Event.objects.get(id=data.get("post"))
-        if data.get("taskcompleted"):
-            event.taskcompleted = True
-        else:
-            event.taskcompleted = False
-        event.save()
     return HttpResponseRedirect(reverse("index"))
     
 
@@ -123,4 +116,15 @@ def events(request, month):
                 total.append(event)
     return JsonResponse(total, safe=False)
     
+@csrf_exempt
+def task(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        event = Event.objects.get(id=data.get("post"))
+        if data.get("taskcompleted"):
+            event.taskcompleted = True
+        else:
+            event.taskcompleted = False
+        event.save()
+        return HttpResponse(status=204)
 
