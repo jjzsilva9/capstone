@@ -22,7 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     $('#eventModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
-        console.log(button);
+
+    })
+
+    $('#eventDetailsModal').on('show.bs.modal', function (event) {
+        $('#eventModal').modal('hide');
 
     })
     $('#nextMonth').click(function(){
@@ -89,12 +93,14 @@ function loadEvent(content) {
         var modal = $('#eventDetailsModal');
         modal.find('.modal-title').text(content.title);
         modal.find('.modal-description').text(content.description);
-        modal.find('.modal-starttime').text(content.starttime);
-        modal.find('.modal-endtime').text(content.endtime);
+        modal.find('.modal-starttime').text(String(content.starttime).slice(11, 16));
+        modal.find('.modal-endtime').text(String(content.endtime).slice(11, 16));
         if (content.task == true){
-            modal.find('.modal-taskcompleted').show();
-            modal.find('.modal-taskcompleted').val(content.taskcompleted);
-            modal.find('.modal-taskcompleted').addEventListener('change', function() {
+            modal.find('#taskcompletedlabel').show();
+            $('.modal-taskcompleted').show();
+            $('.modal-taskcompleted').val(content.taskcompleted);
+            $('#taskcompleted').on('change', function() {
+                console.log("task completed status changed");
                 if (this.checked){
                     fetch(`/post`, {
                         method: "PUT",
@@ -115,6 +121,7 @@ function loadEvent(content) {
             })
         } else {
             modal.find('.modal-taskcompleted').hide();
+            modal.find('#taskcompletedlabel').hide();
         }
         $('.close').click(function() {
             $('#eventDetailsModal').modal('hide');
