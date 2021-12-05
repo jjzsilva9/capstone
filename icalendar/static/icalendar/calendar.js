@@ -13,8 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
         show: true
     });
 
+    $('#eventDetailsModal').modal({
+        keyboard: true,
+        backdrop: false,
+        focus: true,
+        show: true
+    });
+
     $('#eventModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
+        console.log(button);
 
     })
     $('#nextMonth').click(function(){
@@ -28,28 +36,27 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function updateMonth(date){
+    removeEvents();
     fetchEvents(date);
     let month = date.getUTCMonth();
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
-        day.innerHTML = `<p class="row align-items-start justify-content-center">${day.id - firstDay}</p>`;
-        if (day.innerText < 1){
-            day.innerText =  Number(lastDayPrev) + Number(day.innerText);
+        day.querySelector("tr").innerText = day.id - firstDay;
+        if (day.querySelector("tr").innerText < 1){
+            day.querySelector("tr").innerText =  Number(lastDayPrev) + Number(day.querySelector("tr").innerText);
             day.style.color = "lightgrey";
             day.classList.add('noselect');
-        } else if (day.innerText > lastDay){
-            day.innerText = day.innerText - lastDay;
+        } else if (day.querySelector("tr").innerText > lastDay){
+            day.querySelector("tr").innerText = day.querySelector("tr").innerText - lastDay;
             day.style.color = "lightgrey";
         } else {
-            day.setAttribute("data-whatever", `${date.getFullYear()}-${("0"+(date.getUTCMonth()+1)).slice(-2)}-${("0"+day.innerText).slice(-2)}`);
+            day.setAttribute("data-whatever", `${date.getFullYear()}-${("0"+(date.getUTCMonth()+1)).slice(-2)}-${("0"+day.querySelector("tr").innerText).slice(-2)}`);
             day.style.color = "black";
-            if ((month == current.getUTCMonth()+1) && day.innerText == current.getDate()){
+            if ((month == current.getUTCMonth()+1) && day.querySelector("tr").innerText == current.getDate()){
                 console.log(day);
-                day.innerText = `<span class="dot primary">` + day.innerText + `</span>`;
             }
             day.onclick = function (){
                 $('#eventModal').modal('show');
@@ -72,9 +79,9 @@ function fetchEvents(date){
 
 function loadEvent(content) {
     console.log(content)
-    const event = document.createElement("button");
-    event.className="event row align-items-center";
-    event.innerHTML = `<p class="event-title">${content.title}</p>`;
+    const event = document.createElement("tr");
+    event.className="event";
+    event.innerHTML = `<div class="event-title btn btn-secondary">${content.title}</div>`;
     event.id = content.id;
 
     event.onclick = function(){
@@ -85,8 +92,13 @@ function loadEvent(content) {
         modal.find('.modal-description').text(content.description);
         modal.find('.modal-starttime').text(content.starttime);
         modal.find('.modal-endtime').text(content.endtime);
+        $('.close').click(function() {
+            $('#eventDetailsModal').modal('hide');
+        })
     }
-
-    $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).append(`<br>`);
     $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).find("table").append(event);
+}
+
+function removeEvents(){
+    $('.event').remove();
 }

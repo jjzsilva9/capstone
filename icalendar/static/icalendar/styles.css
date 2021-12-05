@@ -53,10 +53,11 @@
 .event {
     /*margin-top: 25px;*/
     max-width: 100px;
+    padding: 2px;
     justify-content: center;
 }
 
 .event-title {
-    padding: 0px;
-    margin: 0;
+    padding: 10px;
+    margin: 2px;
 }
