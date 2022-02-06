@@ -104,17 +104,19 @@ def post(request):
 
 
 def events(request, month):
-    user = User.objects.get(id=request.user.id)
-    events = Event.objects.filter(starttime__month=month)
-    list = [event.serialize() for event in events]
-    total=[]
-    for event in list:
-        if event["host"] == user.username:
-            total.append(event)
-        elif len(event["users"]):
-            if str(user.id) in event["users"][0]:
+    if request.user.is_authenticated:
+        user = User.objects.get(id=request.user.id)
+        events = Event.objects.filter(starttime__month=month)
+        list = [event.serialize() for event in events]
+        total=[]
+        for event in list:
+            if event["host"] == user.username:
                 total.append(event)
-    return JsonResponse(total, safe=False)
+            elif len(event["users"]):
+                if str(user.id) in event["users"][0]:
+                    total.append(event)
+        return JsonResponse(total, safe=False)
+    return JsonResponse([], safe=False)
     
 @csrf_exempt
 def task(request):
