@@ -117,7 +117,7 @@
             <div class="form-group">
               <label for="users" class="col-form-label">Other Users:</label>
               <input type="hidden" value="{{user.id}}" name="host"></input>
-              <select class="custom-select select" multiple id="users" name="users">
+              <select class="form-select" multiple id="users" name="users">
                 {% for account in users %}
                 <option value="{{account.id}}">{{account.username}}</option>
                 {% endfor %}
