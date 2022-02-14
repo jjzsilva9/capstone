@@ -1,6 +1,7 @@
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let current = new Date();
+console.log(current.getDate());
 console.log(current.getUTCMonth());
 document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
@@ -48,7 +49,16 @@ function updateMonth(date){
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
     document.querySelectorAll('.day').forEach(day => {
+        //These are event listeners for the drag and drop functionality
+        day.addEventListener('dragover', dragOver);
+        day.addEventListener('dragenter', dragEnter);
+        day.addEventListener('dragleave', dragLeave);
+        day.addEventListener('drop', dragDrop);
+
+        //Sets the correct day of the month
         day.querySelector("tr").innerText = day.id - firstDay;
+
+        //If the day isn't in the month, set it to the correct date and shade out
         if (day.querySelector("tr").innerText < 1){
             day.querySelector("tr").innerText =  Number(lastDayPrev) + Number(day.querySelector("tr").innerText);
             day.style.color = "lightgrey";
@@ -57,8 +67,11 @@ function updateMonth(date){
             day.querySelector("tr").innerText = day.querySelector("tr").innerText - lastDay;
             day.style.color = "lightgrey";
         } else {
+            //Otherwise, set the data whatever for the modal and make it open the modal on click
             day.setAttribute("data-whatever", `${date.getFullYear()}-${("0"+(date.getUTCMonth()+1)).slice(-2)}-${("0"+day.querySelector("tr").innerText).slice(-2)}`);
             day.style.color = "black";
+
+            //If the day is representing today...
             if ((month == current.getUTCMonth()+1) && day.querySelector("tr").innerText == current.getDate()){
                 console.log(day);
             }
@@ -89,6 +102,9 @@ function loadEvent(content) {
     event.className="event";
     event.innerHTML = `<div class="event-title btn btn-secondary">${content.title}</div>`;
     event.id = content.id;
+    event.setAttribute("draggable", true);
+    event.addEventListener("dragstart", dragStart);
+    event.addEventListener("dragend", dragEnd);
 
     event.onclick = function(){
         $('#eventDetailsModal').modal('show');
@@ -137,4 +153,33 @@ function loadEvent(content) {
 
 function removeEvents(){
     $('.event').remove();
+}
+
+//Drag functions
+function dragStart(){
+    setTimeout(() => (this.className = "invisible"), 0);
+}
+
+function dragEnd(){
+    this.className = "event";
+}
+
+function dragOver(e){
+    e.preventDefault();
+}
+
+function dragEnter(e){
+    e.preventDefault();
+    console.log(e.target);
+    console.log(this);
+}
+
+function dragLeave(){
+
+}
+
+function dragDrop(e){
+    //this.querySelector("tbody").append(e.target);
+    //e.target.append(this);
+    //console.log(e.target);
 }

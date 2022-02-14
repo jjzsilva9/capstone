@@ -54,10 +54,16 @@
     /*margin-top: 25px;*/
     max-width: 100px;
     padding: 2px;
-    justify-content: center;
+    justify-content: left;
 }
 
 .event-title {
-    padding: 10px;
+    padding: 1px 2px 1px 2px;
     margin: 2px;
+    font-size: small;
+    justify-content: left;
+}
+
+.invisible {
+    display: none;
 }
