@@ -123,10 +123,22 @@ def task(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         event = Event.objects.get(id=data.get("post"))
-        if data.get("taskcompleted"):
-            event.taskcompleted = True
-        else:
-            event.taskcompleted = False
+        print(data.get("date"))
+        try:
+            if data["taskcompleted"]:
+                done = data.get("taskcompleted")
+                if done == True:
+                    event.taskcompleted = True
+                else:
+                    event.taskcompleted = False
+        except:
+            
+            date = data.get("date")
+            print(date)
+            starttime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.starttime.hour), int(event.starttime.minute))
+            endtime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.endtime.hour), int(event.endtime.minute))
+            event.starttime = starttime
+            event.endtime = endtime
         event.save()
         return HttpResponse(status=204)
 

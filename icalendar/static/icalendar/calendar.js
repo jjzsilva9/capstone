@@ -3,6 +3,7 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 let current = new Date();
 console.log(current.getDate());
 console.log(current.getUTCMonth());
+var dragged;
 document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
     updateMonth(date);
@@ -92,6 +93,9 @@ function fetchEvents(date){
     fetch(`/events/${parseInt(date.getUTCMonth())+1}`)
     .then(response => response.json())
     .then(events => {
+        events.sort(function(a, b) {
+            return a.starttime - b.starttime;
+        })
         events.forEach(loadEvent);
     })
 }
@@ -156,7 +160,10 @@ function removeEvents(){
 }
 
 //Drag functions
-function dragStart(){
+function dragStart(event){
+    dragged = event.target;
+    //console.log(dragged);
+    //console.log("test")
     setTimeout(() => (this.className = "invisible"), 0);
 }
 
@@ -170,8 +177,8 @@ function dragOver(e){
 
 function dragEnter(e){
     e.preventDefault();
-    console.log(e.target);
-    console.log(this);
+    //console.log(e.target);
+    //console.log(this);
 }
 
 function dragLeave(){
@@ -179,7 +186,17 @@ function dragLeave(){
 }
 
 function dragDrop(e){
-    //this.querySelector("tbody").append(e.target);
-    //e.target.append(this);
+    e.preventDefault();
+    //console.log(dragged);
     //console.log(e.target);
+    //console.log("dropped");
+    e.target.querySelector("tbody").append(dragged);
+    console.log(e.target.getAttribute("data-whatever"));
+    fetch(`/task`, {
+        method: "PUT",
+        body: JSON.stringify({
+            post: dragged.id,
+            date: e.target.getAttribute("data-whatever")
+        })
+    })
 }
