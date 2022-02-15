@@ -93,9 +93,6 @@ function fetchEvents(date){
     fetch(`/events/${parseInt(date.getUTCMonth())+1}`)
     .then(response => response.json())
     .then(events => {
-        events.sort(function(a, b) {
-            return a.starttime - b.starttime;
-        })
         events.forEach(loadEvent);
     })
 }

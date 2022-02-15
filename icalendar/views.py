@@ -115,7 +115,7 @@ def events(request, month):
             elif len(event["users"]):
                 if str(user.id) in event["users"][0]:
                     total.append(event)
-        return JsonResponse(total, safe=False)
+        return JsonResponse(sorted(total, key=lambda d: d['starttime']), safe=False)
     return JsonResponse([], safe=False)
     
 @csrf_exempt
