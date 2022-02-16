@@ -101,7 +101,7 @@ function loadEvent(content) {
     console.log(content)
     const event = document.createElement("tr");
     event.className="event btn btn-secondary";
-    event.innerHTML = `<div class="event-time>${content.starttime}</div>"<div class="event-title">${content.title}</div>`;
+    event.innerHTML = `<div class="eventtime>${content.starttime}</div>"<div class="event-title">${content.title}</div>`;
     event.id = content.id;
     event.setAttribute("draggable", true);
     event.addEventListener("dragstart", dragStart);
@@ -196,4 +196,15 @@ function dragDrop(e){
             date: e.target.getAttribute("data-whatever")
         })
     })
+}
+
+function updateDay(day) {
+    table = day.querySelector("tbody");
+    starttimes = []
+    table.forEach(function() {
+        if (this.className != "date") {
+            starttimes.push([this, this.querySelector(".eventtime")]
+        }
+    })
+           
 }
