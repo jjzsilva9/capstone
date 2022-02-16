@@ -100,8 +100,8 @@ function fetchEvents(date){
 function loadEvent(content) {
     console.log(content)
     const event = document.createElement("tr");
-    event.className="event";
-    event.innerHTML = `<div class="event-title btn btn-secondary">${content.title}</div>`;
+    event.className="event btn btn-secondary";
+    event.innerHTML = `<div class="event-time>${content.starttime}</div>"<div class="event-title">${content.title}</div>`;
     event.id = content.id;
     event.setAttribute("draggable", true);
     event.addEventListener("dragstart", dragStart);
