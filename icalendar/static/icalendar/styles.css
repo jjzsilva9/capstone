@@ -4,7 +4,7 @@
     border:solid lightgrey 1px;
     display: inline-flex;
     padding-top: 2px;
-    justify-content: center;
+    /*justify-content: center;*/
 }
 
 .day-of-week > .col {
@@ -51,20 +51,29 @@
 }
 
 .event {
-    /*margin-top: 25px;*/
-    max-width: 100px;
+    width: 100%;
     padding: 0px;
     justify-content: left;
+    align-content: left;
+    display: inline-block;
 }
 
 .event-title {
-    padding: 1px 2px 1px 2px;
-    margin: 2px;
+    /*padding: 1px 2px 1px 2px;*/
     font-size: small;
-    justify-content: left;
     user-select: none;
 }
 
 .invisible {
     display: none;
+}
+
+table {
+    width: 100%;
+    margin: 0;
+}
+
+#monthNotes {
+    width: max-content;
+    height: max-content;
 }

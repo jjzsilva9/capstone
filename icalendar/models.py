@@ -15,6 +15,7 @@ class Tag(models.Model):
         ("OR", 0xFBAA17)
     ]
     color = models.CharField(choices= COLOR_CHOICES, max_length=2, default="BL")
+    user = models.ManyToManyField(User, related_name="tags")
 
 class Event(models.Model):
     starttime = models.DateTimeField(auto_now_add=False)
@@ -38,3 +39,8 @@ class Event(models.Model):
             "taskcompleted": self.taskcompleted,
             "host": self.host.username
         }
+
+class Month(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="month")
+    month = models.DateTimeField(auto_now_add=False)
+    notes = models.CharField(max_length=1024)

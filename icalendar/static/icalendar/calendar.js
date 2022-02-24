@@ -101,7 +101,7 @@ function loadEvent(content) {
     console.log(content)
     const event = document.createElement("tr");
     event.className="event btn btn-secondary";
-    event.innerHTML = `<div class="eventtime>${content.starttime}</div>"<div class="event-title">${content.title}</div>`;
+    event.innerHTML = `<div class="event-title text-left">${content.starttime.slice(11, 16)} ${content.title}</div>`;
     event.id = content.id;
     event.setAttribute("draggable", true);
     event.addEventListener("dragstart", dragStart);
@@ -165,7 +165,7 @@ function dragStart(event){
 }
 
 function dragEnd(){
-    this.className = "event";
+    this.className = "event btn btn-secondary";
 }
 
 function dragOver(e){
@@ -184,7 +184,7 @@ function dragLeave(){
 
 function dragDrop(e){
     e.preventDefault();
-    //console.log(dragged);
+    console.log(dragged);
     //console.log(e.target);
     //console.log("dropped");
     e.target.querySelector("tbody").append(dragged);
@@ -203,7 +203,7 @@ function updateDay(day) {
     starttimes = []
     table.forEach(function() {
         if (this.className != "date") {
-            starttimes.push([this, this.querySelector(".eventtime")]
+            starttimes.push([this, this.querySelector(".eventtime")])
         }
     })
            
