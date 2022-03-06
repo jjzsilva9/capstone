@@ -1,8 +1,6 @@
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let current = new Date();
-console.log(current.getDate());
-console.log(current.getUTCMonth());
 var dragged;
 document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
@@ -39,11 +37,16 @@ document.addEventListener("DOMContentLoaded", function () {
         date.setMonth(date.getMonth()-1);
         updateMonth(date);
     })
+
+    //$('#saveNotes').click(function(){
+    //    fetch("")
+    //})
 })
 
 function updateMonth(date){
     removeEvents();
     fetchEvents(date);
+    fetchNotes(date);
     let month = date.getUTCMonth();
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -154,6 +157,15 @@ function loadEvent(content) {
 
 function removeEvents(){
     $('.event').remove();
+}
+
+function fetchNotes(date){
+    fetch(`/notes/${String(date.getFullYear()) + String(date.getMonth())}`)
+    .then(response => response.json())
+    .then(notes => {
+        console.log(notes);
+        $('.monthNotes').innerHTML = notes; 
+    })
 }
 
 //Drag functions

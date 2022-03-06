@@ -9,5 +9,7 @@ urlpatterns = [
     path('register', views.register, name="register"),
     path('post', views.post, name="post"),
     path('events/<month>', views.events, name="events"),
-    path('task', views.task, name="task")
+    path('task', views.task, name="task"),
+    path('date', views.date, name="date"),
+    path('notes/<date>', views.notes, name="notes")
 ]

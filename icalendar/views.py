@@ -8,7 +8,7 @@ from django.http.response import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Event
+from .models import User, Event, Month
 
 # Create your views here.
 
@@ -123,22 +123,42 @@ def task(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         event = Event.objects.get(id=data.get("post"))
-        print(data.get("date"))
-        try:
-            if data["taskcompleted"]:
-                done = data.get("taskcompleted")
-                if done == True:
-                    event.taskcompleted = True
-                else:
-                    event.taskcompleted = False
-        except:
-            
-            date = data.get("date")
-            print(date)
-            starttime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.starttime.hour), int(event.starttime.minute))
-            endtime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.endtime.hour), int(event.endtime.minute))
-            event.starttime = starttime
-            event.endtime = endtime
+        if data["taskcompleted"]:
+            done = data.get("taskcompleted")
+            if done == True:
+                event.taskcompleted = True
+            else:
+                event.taskcompleted = False
         event.save()
         return HttpResponse(status=204)
 
+@csrf_exempt
+def date(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        event = Event.objects.get(id=data.get("post"))
+        date = data.get("date")
+        print(date)
+        starttime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.starttime.hour), int(event.starttime.minute))
+        endtime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.endtime.hour), int(event.endtime.minute))
+        event.starttime = starttime
+        event.endtime = endtime
+        event.save()
+        return HttpResponse(status=204)
+
+@csrf_exempt
+def notes(request, date):
+    if request.user.is_authenticated:
+        newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1)
+        print(newdate)
+        if request.method == "PUT":
+            print("hello")
+        elif request.method == "PULL":
+            month = Month.objects.get(user=User.objects.get(id=request.user.id), date=date)
+            if month:
+                return JsonResponse(month.notes, safe=False)
+            return JsonResponse("Type some notes here", safe=False)
+        elif request.method == "POST":
+            print("HELLO")
+            
+    return HttpResponse(status=204)
