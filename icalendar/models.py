@@ -1,10 +1,12 @@
 from django.db import models
+#Uses default Django User model
 from django.contrib.auth.models import User
-# Create your models here.
 
 
+#Class for tags
 class Tag(models.Model):
     title = models.CharField(max_length=32)
+    #Choices for the colours which can be chosen
     COLOR_CHOICES = [
         ("BL", 0x3362FF),
         ("GR", 0x1EE42E),
@@ -15,13 +17,17 @@ class Tag(models.Model):
         ("OR", 0xFBAA17)
     ]
     color = models.CharField(choices= COLOR_CHOICES, max_length=2, default="BL")
+    #The user who creates the tag
     user = models.ManyToManyField(User, related_name="tags")
 
+#Class for event and tasks
 class Event(models.Model):
+    #Important fields
     starttime = models.DateTimeField(auto_now_add=False)
     endtime = models.DateTimeField(auto_now_add=False)
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
+    #Additional users
     users = models.ManyToManyField(User, related_name="additional_users")
     task = models.BooleanField()
     taskcompleted = models.BooleanField(default=False)
@@ -40,6 +46,7 @@ class Event(models.Model):
             "host": self.host.username
         }
 
+#Class for month
 class Month(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="month")
     month = models.DateTimeField(auto_now_add=False)
