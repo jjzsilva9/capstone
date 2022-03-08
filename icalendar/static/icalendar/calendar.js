@@ -1,11 +1,16 @@
-
+//Used for converting date objects to string
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let current = new Date();
 var dragged;
+
+//When the document has loaded
 document.addEventListener("DOMContentLoaded", function () {
     let date = new Date();
+    
+    //Update the month to the current day
     updateMonth(date);
-
+    
+    //Settings for modals
     $('#eventModal').modal({
         keyboard: true,
         backdrop: false,
@@ -19,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         focus: true,
         show: true
     });
-
+    
     $('#eventModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
 
@@ -29,10 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#eventModal').modal('hide');
 
     })
+    
+    //When next month pressed, update to the next month
     $('#nextMonth').click(function(){
         date.setMonth(date.getMonth()+1);
         updateMonth(date);
     })
+    
+    //When previous month pressed, update to the previous month
     $('#prevMonth').click(function(){
         date.setMonth(date.getMonth()-1);
         updateMonth(date);
@@ -48,7 +57,9 @@ function updateMonth(date){
     fetchEvents(date);
     fetchNotes(date);
     let month = date.getUTCMonth();
+    //Sets to title to the current month and year
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
+    //Defines key variables for setting the dates
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     var lastDayPrev = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
@@ -92,6 +103,7 @@ function updateMonth(date){
     });
 }
 
+//Makes a fetch request to the backend which returns the events for that user for that month
 function fetchEvents(date){
     fetch(`/events/${parseInt(date.getUTCMonth())+1}`)
     .then(response => response.json())
@@ -100,16 +112,19 @@ function fetchEvents(date){
     })
 }
 
+//Creates an element for each event
 function loadEvent(content) {
-    console.log(content)
     const event = document.createElement("tr");
     event.className="event btn btn-secondary";
+    //Sets inner text to contain the starting time and the title
     event.innerHTML = `<div class="event-title text-left">${content.starttime.slice(11, 16)} ${content.title}</div>`;
     event.id = content.id;
+    //Allows it to be dragged for drag and drop
     event.setAttribute("draggable", true);
     event.addEventListener("dragstart", dragStart);
     event.addEventListener("dragend", dragEnd);
-
+    
+    //Fills modal information when clicked
     event.onclick = function(){
         $('#eventDetailsModal').modal('show');
         var modal = $('#eventDetailsModal');
@@ -122,7 +137,6 @@ function loadEvent(content) {
             $('.modal-taskcompleted').show();
             $('.modal-taskcompleted').prop('checked', content.taskcompleted);
             $('#taskcompleted').on('change', function() {
-                console.log("task completed status changed");
                 if (this.checked){
                     fetch(`/task`, {
                         method: "PUT",
@@ -155,10 +169,12 @@ function loadEvent(content) {
     $(`.day[data-whatever="${content.starttime.slice(0, 10)}"]`).find("table").append(event);
 }
 
+//Removes all event instances on the calendar
 function removeEvents(){
     $('.event').remove();
 }
 
+//Fetches the notes for that user for that month
 function fetchNotes(date){
     fetch(`/notes/${String(date.getFullYear()) + String(date.getMonth())}`)
     .then(response => response.json())
@@ -171,12 +187,12 @@ function fetchNotes(date){
 //Drag functions
 function dragStart(event){
     dragged = event.target;
-    //console.log(dragged);
-    //console.log("test")
+    //Makes it invisible when drag starts
     setTimeout(() => (this.className = "invisible"), 0);
 }
 
 function dragEnd(){
+    //Makes visible again
     this.className = "event btn btn-secondary";
 }
 
@@ -186,21 +202,12 @@ function dragOver(e){
 
 function dragEnter(e){
     e.preventDefault();
-    //console.log(e.target);
-    //console.log(this);
-}
-
-function dragLeave(){
-
 }
 
 function dragDrop(e){
+    //Adds event to the new day and tells the back-end this through PUT
     e.preventDefault();
-    console.log(dragged);
-    //console.log(e.target);
-    //console.log("dropped");
     e.target.querySelector("tbody").append(dragged);
-    console.log(e.target.getAttribute("data-whatever"));
     fetch(`/task`, {
         method: "PUT",
         body: JSON.stringify({
@@ -208,15 +215,4 @@ function dragDrop(e){
             date: e.target.getAttribute("data-whatever")
         })
     })
-}
-
-function updateDay(day) {
-    table = day.querySelector("tbody");
-    starttimes = []
-    table.forEach(function() {
-        if (this.className != "date") {
-            starttimes.push([this, this.querySelector(".eventtime")])
-        }
-    })
-           
 }
