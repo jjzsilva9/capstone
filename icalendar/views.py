@@ -193,11 +193,15 @@ def notes(request, date):
         print(newdate)
         if request.method == "PUT":
             print("hello")
-        elif request.method == "PULL":
-            month = Month.objects.get(user=User.objects.get(id=request.user.id), date=date)
-            if month:
-                return JsonResponse(month.notes, safe=False)
-            return JsonResponse("Type some notes here", safe=False)
+        elif request.method == "GET":
+            try:
+                month = Month.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
+                if month:
+                    print(month.notes)
+                    return JsonResponse(month, safe=False)
+            except:
+                print("Type some notes here...")
+                return JsonResponse("Type some notes here...", safe=False)
         elif request.method == "POST":
             print("HELLO")
             

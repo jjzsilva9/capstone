@@ -67,7 +67,6 @@ function updateMonth(date){
         //These are event listeners for the drag and drop functionality
         day.addEventListener('dragover', dragOver);
         day.addEventListener('dragenter', dragEnter);
-        day.addEventListener('dragleave', dragLeave);
         day.addEventListener('drop', dragDrop);
 
         //Sets the correct day of the month
@@ -179,8 +178,14 @@ function fetchNotes(date){
     fetch(`/notes/${String(date.getFullYear()) + String(date.getMonth())}`)
     .then(response => response.json())
     .then(notes => {
+        
         console.log(notes);
-        $('.monthNotes').innerHTML = notes; 
+        if (notes === "Type some notes here..."){
+            console.log("placeholder");
+            $('#monthNotes').attr("placeholder", notes); 
+        }else {
+            $('#monthNotes').html(notes); 
+        }
     })
 }
 
@@ -208,7 +213,7 @@ function dragDrop(e){
     //Adds event to the new day and tells the back-end this through PUT
     e.preventDefault();
     e.target.querySelector("tbody").append(dragged);
-    fetch(`/task`, {
+    fetch(`/date`, {
         method: "PUT",
         body: JSON.stringify({
             post: dragged.id,
