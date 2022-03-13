@@ -189,15 +189,9 @@ def date(request):
 @csrf_exempt
 def notes(request, date):
     if request.user.is_authenticated:
-        newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1)
+        newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1, 0, 0, 0)
         print(newdate)
-        if request.method == "PUT":
-            data = json.loads(request.body)
-            goals = data.get("goals")
-            note = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
-            note.notes = goals
-            note.save()
-        elif request.method == "GET":
+        if request.method == "GET":
             try:
                 month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
@@ -207,8 +201,18 @@ def notes(request, date):
                 print("Type some notes here...")
                 return JsonResponse("Type some notes here...", safe=False)
         elif request.method == "POST":
-            goals = request.POST["goals"]
-            note = Note.objects.create(user=User.objects.get(id=request.user.id), month=newdate, notes=goals)
-            note.save()
-            
+            data = json.loads(request.body)
+            goals = data.get("goals")
+            try:
+                month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
+                if month:
+                    data = json.loads(request.body)
+                    goals = data.get("goals")
+                    print(goals)
+                    note = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
+                    note.notes = goals
+                    note.save()
+            except:
+                note = Note.objects.create(user=User.objects.get(id=request.user.id), month=newdate, notes=goals)
+                note.save()
     return HttpResponse(status=204)
