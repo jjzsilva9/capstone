@@ -47,7 +47,7 @@ class Event(models.Model):
         }
 
 #Class for month
-class Month(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="month")
+class Note(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
     month = models.DateTimeField(auto_now_add=False)
     notes = models.CharField(max_length=1024)

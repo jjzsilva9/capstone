@@ -8,7 +8,7 @@ from django.http.response import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Event, Month
+from .models import User, Event, Note
 
 #Main view
 def index(request):
@@ -192,10 +192,14 @@ def notes(request, date):
         newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1)
         print(newdate)
         if request.method == "PUT":
-            print("hello")
+            data = json.loads(request.body)
+            goals = data.get("goals")
+            note = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
+            note.notes = goals
+            note.save()
         elif request.method == "GET":
             try:
-                month = Month.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
+                month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
                     print(month.notes)
                     return JsonResponse(month, safe=False)
@@ -203,6 +207,8 @@ def notes(request, date):
                 print("Type some notes here...")
                 return JsonResponse("Type some notes here...", safe=False)
         elif request.method == "POST":
-            print("HELLO")
+            goals = request.POST["goals"]
+            note = Note.objects.create(user=User.objects.get(id=request.user.id), month=newdate, notes=goals)
+            note.save()
             
     return HttpResponse(status=204)

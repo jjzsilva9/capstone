@@ -47,9 +47,16 @@ document.addEventListener("DOMContentLoaded", function () {
         updateMonth(date);
     })
 
-    //$('#saveNotes').click(function(){
-    //    fetch("")
-    //})
+    $('#saveNotes').click(function(){
+        console.log($('#monthNotes').val())
+        fetch(`/notes/${String(date.getFullYear()) + String(date.getMonth())}`, 
+        {
+            method: "POST",
+            body: JSON.stringify({
+                goals: $('#monthNotes').val()
+            })
+        })
+    })
 })
 
 function updateMonth(date){
