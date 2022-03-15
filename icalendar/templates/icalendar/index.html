@@ -2,7 +2,10 @@
 {% load static %}
 {% block body %}
 <br>
+<!If the view is rendered with a specific message to the user, display it here>
 <h2>{{message}}</h2>
+
+<!The current month and changing month buttons>
 <div class="noselect container header">
     <h2 class="d-inline" id="thisMonth">This Month</h2>
     <div class="d-inline" id="monthButtons">
@@ -10,8 +13,11 @@
         <button class="btn btn-light d-inline monthButton" id="nextMonth"><span>&gt;</span></button>
     </div>
 </div>
+
+<!Calendar container>
 <div class="noselect calendar container">
     <div class="date-grid">
+        <!Row for the days of the week names>
         <div class="row day-of-week bg-dark">
             <div class="col">Sunday</div>
             <div class="col">Monday</div>
@@ -21,6 +27,7 @@
             <div class="col">Friday</div>
             <div class="col">Saturday</div>
         </div>
+        <!Rows to cover all of the days in a month>
         <div class="row week 1">
             <button class="col day container" id="1"><table><tr class="date"></tr></table></button>
             <button class="col day container" id="2"><table><tr class="date"></tr></table></button>
@@ -78,6 +85,7 @@
     </div>
 </div>
 
+<!Notes section>
 <br>
 <div class="container notes">
   <h3>Notes</h3>
@@ -85,6 +93,7 @@
   <button class="btn btn-primary" id="saveNotes">Save</button>
 </div>
 
+<!Modal for event generation>
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -95,6 +104,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <!If the user is logged in, display the form>
           {% if user.is_authenticated %}
           <form id="eventForm" action="{% url 'post' %}" method="POST">
             {% csrf_token %}
@@ -121,6 +131,7 @@
               <label for="task" class="form-check-label">Task</label>
               <input type="checkbox" class="form-check-input" id="task" name="task"></input>
             </div>
+            <!For each user, add them as an option for sharing events>
             <div class="form-group">
               <label for="users" class="col-form-label">Other Users:</label>
               <input type="hidden" value="{{user.id}}" name="host"></input>
@@ -146,6 +157,7 @@
     </div>
   </div>
 
+  <!Modal for event details>
   <div class="modal fade" id="eventDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
