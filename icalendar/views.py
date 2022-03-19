@@ -12,6 +12,7 @@ from .models import User, Event, Note
 
 #Main view
 def index(request):
+    Event.objects.all().delete()
     if request.user.is_authenticated:
         #If logged in, don't include the user in the other users selection when creating an event
         users = User.objects.exclude(username=request.user.username)
@@ -190,15 +191,13 @@ def date(request):
 def notes(request, date):
     if request.user.is_authenticated:
         newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1, 0, 0, 0)
-        print(newdate)
         if request.method == "GET":
             try:
                 month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
                     print(month.notes)
-                    return JsonResponse(month, safe=False)
+                    return JsonResponse(month.notes, safe=False)
             except:
-                print("Type some notes here...")
                 return JsonResponse("Type some notes here...", safe=False)
         elif request.method == "POST":
             data = json.loads(request.body)
@@ -208,7 +207,6 @@ def notes(request, date):
                 if month:
                     data = json.loads(request.body)
                     goals = data.get("goals")
-                    print(goals)
                     note = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                     note.notes = goals
                     note.save()

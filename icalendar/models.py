@@ -1,24 +1,24 @@
+from random import choices
 from django.db import models
 #Uses default Django User model
 from django.contrib.auth.models import User
 
 
 #Class for tags
-class Tag(models.Model):
-    title = models.CharField(max_length=32)
+#class Tag(models.Model):
     #Choices for the colours which can be chosen
-    COLOR_CHOICES = [
-        ("BL", 0x3362FF),
-        ("GR", 0x1EE42E),
-        ("RE", 0xE4261E),
-        ("PI", 0xE41EA9),
-        ("YE", 0xEAE61F),
-        ("PU", 0xC11EE4),
-        ("OR", 0xFBAA17)
-    ]
-    color = models.CharField(choices= COLOR_CHOICES, max_length=2, default="BL")
-    #The user who creates the tag
-    user = models.ManyToManyField(User, related_name="tags")
+#    COLOR_CHOICES = [
+ #       ("BL", 0x3362FF),
+#        ("GR", 0x1EE42E),
+#        ("RE", 0xE4261E),
+ #       ("PI", 0xE41EA9),
+ #       ("YE", 0xEAE61F),
+ #       ("PU", 0xC11EE4),
+  #      ("OR", 0xFBAA17)
+  #  ]
+    
+ #   color = models.CharField(choices= COLOR_CHOICES, max_length=2, default="BL")
+    
 
 #Class for event and tasks
 class Event(models.Model):
@@ -32,7 +32,13 @@ class Event(models.Model):
     task = models.BooleanField()
     taskcompleted = models.BooleanField(default=False)
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")
-    tags = models.ManyToManyField(Tag, related_name="event")
+    URGENCY_CHOICE = [
+        ("CR", "Critical"),
+        ("HI", "High"),
+        ("ME", "Medium"),
+        ("LO", "Low")
+    ]
+    urgency = models.CharField(choices=URGENCY_CHOICE, max_length=2)
     def serialize(self):
         return {
             "id": self.id,
