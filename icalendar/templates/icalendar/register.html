@@ -3,6 +3,7 @@
 {% block body %}
 <br>
 <h2 class="my-4">Register a Profile</h2>
+<p>{{message}}</p>
 <form action="{% url 'register' %}" method="POST">
     {% csrf_token %}
     <div class="form-group col-md-6 my-2">
