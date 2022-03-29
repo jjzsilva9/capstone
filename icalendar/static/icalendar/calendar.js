@@ -190,7 +190,6 @@ function fetchNotes(date){
         if (notes === "Type some notes here..."){
             console.log("placeholder");
             $('#monthNotes').attr("placeholder", notes); 
-            $('#monthNotes').empty();
         }else {
             $('#monthNotes').html(notes); 
         }
