@@ -196,7 +196,7 @@ def notes(request, date):
                 month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
                     print(month.notes)
-                    return JsonResponse(month, safe=False)
+                    return JsonResponse(month.notes, safe=False)
             except:
                 print("Type some notes here...")
                 return JsonResponse("Type some notes here...", safe=False)
