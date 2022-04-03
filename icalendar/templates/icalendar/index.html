@@ -141,6 +141,14 @@
                 {% endfor %}
               </select>
             </div>
+            <div class="form-group">
+              <label for="tagPicker" class="col-form-label">Tag</label>
+              <select class="form-select" id="tagPicker" name="tag">
+                <option value="LO">Low</option>
+                <option value="ME">Medium</option>
+                <option value="HI">High</option>
+              </select>
+            </div>
             <div class="modal-footer">
               <button type="button" class="close btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -175,6 +183,8 @@
           <label for="endtime" class="label">End time:</label>
           <time class="modal-endtime" id="endtime"></time>
           <br>
+          <label for="tag" class="label" id="taglabel">Tag</label>
+          <button type="button" class="" id="tag">Priority</button>
           <label for="taskcompleted" class="label" id="taskcompletedlabel">Task completed:</label>
           <input type="checkbox" class="modal-taskcompleted" id="taskcompleted" name="taskcompleted"></input>
         </div>

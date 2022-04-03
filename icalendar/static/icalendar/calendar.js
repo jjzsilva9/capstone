@@ -129,6 +129,14 @@ function loadEvent(content) {
     event.setAttribute("draggable", true);
     event.addEventListener("dragstart", dragStart);
     event.addEventListener("dragend", dragEnd);
+
+    if (content.tag === "LO") {
+        event.className="event btn btn-success";
+    } else if (content.tag === "ME") {
+        event.className="event btn btn-warning";
+    } else {
+        event.className="event btn btn-danger";
+    }
     
     //Fills modal information when clicked
     event.onclick = function(){

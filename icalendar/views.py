@@ -102,6 +102,7 @@ def post(request):
         start_time = request.POST["start-time"]
         end_time = request.POST["end-time"]
         date = request.POST["date"]
+        tag = request.POST["tag"]
         #Check if they included a task or other users
         try:
             task = request.POST["task"]
@@ -118,7 +119,7 @@ def post(request):
         start_time = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(start_time[0:2]), int(start_time[3:5]))
         end_time = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(end_time[0:2]), int(end_time[3:5]))
         #Create the event
-        event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, host=host, task=task)
+        event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, host=host, task=task, tag=tag)
         #Save it
         event.save()
         #For each account mentioned in the other users, reference them
