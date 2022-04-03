@@ -57,12 +57,51 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         })
     })
+
+    $('#hostFilter').on("change", function() {
+        filter(date);
+    })
+
+    $('#lowFilter').on("change", function() {
+        filter(date);
+    })
+
+    $('#mediumFilter').on("change", function() {
+        filter(date);
+    })
+
+    $('#highFilter').on("change", function() {
+        filter(date);
+    })
 })
+
+function filter(date){
+    console.log("filters changed");
+    var host = $('#hostFilter').is(":checked");
+    var low = $('#lowFilter').is(":checked");
+    var medium = $('#mediumFilter').is(":checked");
+    var high = $('#highFilter').is(":checked");
+    user = $('#username');
+    document.querySelectorAll('.event').forEach(event => {
+        if (!host || (event.host) != user){
+            event.style.display="none";
+        } else if (!low || event.classList.contains("success")) {
+            event.style.display="none";
+        } else if (!medium || event.classList.contains("warning")) {
+            event.style.display="none";
+        } else if (!high || event.classList.contains("danger")) {
+            event.style.display="none";
+        } else {
+            event.style.display="inline-block";
+        }
+    })
+}
 
 function updateMonth(date){
     removeEvents();
     fetchEvents(date);
     fetchNotes(date);
+    filter(date);
     let month = date.getUTCMonth();
     //Sets to title to the current month and year
     $('#thisMonth').text(months[month] + ' ' + date.getFullYear());
@@ -127,6 +166,7 @@ function loadEvent(content) {
     event.id = content.id;
     //Allows it to be dragged for drag and drop
     event.setAttribute("draggable", true);
+    event.setAttribute("host", content.host);
     event.addEventListener("dragstart", dragStart);
     event.addEventListener("dragend", dragEnd);
 
@@ -146,6 +186,16 @@ function loadEvent(content) {
         modal.find('.modal-description').text(content.description);
         modal.find('.modal-starttime').text(String(content.starttime).slice(11, 16));
         modal.find('.modal-endtime').text(String(content.endtime).slice(11, 16));
+        if (content.tag === "LO") {
+            modal.find('#tag').addClass("btn btn-success");
+            modal.find('#tag').html("Low");
+        } else if (content.tag === "ME") {
+            modal.find('#tag').addClass("btn btn-warning");
+            modal.find('#tag').html("Medium");
+        } else {
+            modal.find('#tag').addClass("btn btn-danger");
+            modal.find('#tag').html("High");
+        }
         if (content.task == true){
             modal.find('#taskcompletedlabel').show();
             $('.modal-taskcompleted').show();

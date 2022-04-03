@@ -12,6 +12,16 @@
         <button class="btn btn-light d-inline monthButton" id="prevMonth"><span>&lt;</span></button>
         <button class="btn btn-light d-inline monthButton" id="nextMonth"><span>&gt;</span></button>
     </div>
+    <div class="d-inline" id="filters">
+      Other user events:
+      <input type="checkbox" id="hostFilter"></input>
+        Low:
+      <input type="checkbox" id="lowFilter"></input>
+        Medium:
+      <input type="checkbox" id="mediumFilter"></input>
+        High:
+      <input type="checkbox" id="highFilter"></input>
+    </div>
 </div>
 
 <!Calendar container>
@@ -183,8 +193,9 @@
           <label for="endtime" class="label">End time:</label>
           <time class="modal-endtime" id="endtime"></time>
           <br>
-          <label for="tag" class="label" id="taglabel">Tag</label>
+          <label for="tag" class="label" id="taglabel">Tag:</label>
           <button type="button" class="" id="tag">Priority</button>
+          <br>
           <label for="taskcompleted" class="label" id="taskcompletedlabel">Task completed:</label>
           <input type="checkbox" class="modal-taskcompleted" id="taskcompleted" name="taskcompleted"></input>
         </div>
