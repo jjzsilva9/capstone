@@ -81,15 +81,17 @@ function filter(date){
     var low = $('#lowFilter').is(":checked");
     var medium = $('#mediumFilter').is(":checked");
     var high = $('#highFilter').is(":checked");
-    user = $('#username');
+    user = $('#username').text();
+    console.log(user);
     document.querySelectorAll('.event').forEach(event => {
-        if (!host || (event.host) != user){
+        console.log(event["host"]);
+        if (!host && ((event.getAttribute("host")) != user)){
             event.style.display="none";
-        } else if (!low || event.classList.contains("success")) {
+        } else if ((!low) && (event.classList.contains("btn-success"))) {
             event.style.display="none";
-        } else if (!medium || event.classList.contains("warning")) {
+        } else if (!medium && event.classList.contains("btn-warning")) {
             event.style.display="none";
-        } else if (!high || event.classList.contains("danger")) {
+        } else if (!high && event.classList.contains("btn-danger")) {
             event.style.display="none";
         } else {
             event.style.display="inline-block";

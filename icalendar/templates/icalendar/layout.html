@@ -26,7 +26,7 @@
         {% if user.is_authenticated %}
         <div class="navbar-header" id="profileInfo">
           <a id="logoutButton" class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
-          <a class="navbar-brand" id="username"><strong>{{ user.username }}</strong></a>
+          <a class="navbar-brand"><strong id="username">{{ user.username }}</strong></a>
         </div>
         <!Otherwise, show a login button and a register button>
         {% else %}
