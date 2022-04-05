@@ -169,6 +169,7 @@ function loadEvent(content) {
     //Allows it to be dragged for drag and drop
     event.setAttribute("draggable", true);
     event.setAttribute("host", content.host);
+    event.setAttribute("tag", content.tag);
     event.addEventListener("dragstart", dragStart);
     event.addEventListener("dragend", dragEnd);
 
@@ -266,7 +267,14 @@ function dragStart(event){
 
 function dragEnd(){
     //Makes visible again
-    this.className = "event btn btn-secondary";
+    content = this.getAttribute("tag");
+    if (content === "LO") {
+        this.className="event btn btn-success";
+    } else if (content === "ME") {
+        this.className="event btn btn-warning";
+    } else {
+        this.className="event btn btn-danger";
+    }
 }
 
 function dragOver(e){

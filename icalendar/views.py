@@ -177,6 +177,7 @@ def date(request):
         data = json.loads(request.body)
         event = Event.objects.get(id=data.get("post"))
         date = data.get("date")
+        print(date)
         #Format the starttime and endtime
         starttime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.starttime.hour), int(event.starttime.minute))
         endtime = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(event.endtime.hour), int(event.endtime.minute))
