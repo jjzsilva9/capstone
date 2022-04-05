@@ -110,7 +110,8 @@ def post(request):
         except:
             task = False
         try:
-            users = request.POST["users"]
+            users = request.POST.getlist("users")
+            print(users)
         except:
             users = []
         host = request.POST["host"]
