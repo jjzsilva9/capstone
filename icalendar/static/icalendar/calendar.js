@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateMonth(date);
     })
 
+    //When the save notes button is pressed, post it to be saved
     $('#saveNotes').click(function(){
         console.log($('#monthNotes').val())
         fetch(`/notes/${String(date.getFullYear()) + String(date.getMonth())}`, 
@@ -57,7 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         })
     })
-
+    
+    //Call filter function when the filter status changes x4
     $('#hostFilter').on("change", function() {
         filter(date);
     })
@@ -75,16 +77,20 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 })
 
+//Check each event against all of the filters
 function filter(date){
     console.log("filters changed");
+    //Get the status of each filter
     var host = $('#hostFilter').is(":checked");
     var low = $('#lowFilter').is(":checked");
     var medium = $('#mediumFilter').is(":checked");
     var high = $('#highFilter').is(":checked");
+    //Get the username
     user = $('#username').text();
     console.log(user);
     document.querySelectorAll('.event').forEach(event => {
         console.log(event["host"]);
+        //Compare each filter against each property
         if (!host && ((event.getAttribute("host")) != user)){
             event.style.display="none";
         } else if ((!low) && (event.classList.contains("btn-success"))) {
@@ -168,11 +174,16 @@ function loadEvent(content) {
     event.id = content.id;
     //Allows it to be dragged for drag and drop
     event.setAttribute("draggable", true);
+    
+    //Sets the host for filtering
     event.setAttribute("host", content.host);
+    
+    //Sets the tag for filtering and dragging
     event.setAttribute("tag", content.tag);
     event.addEventListener("dragstart", dragStart);
     event.addEventListener("dragend", dragEnd);
-
+    
+    //Set the class based on the tag
     if (content.tag === "LO") {
         event.className="event btn btn-success";
     } else if (content.tag === "ME") {
@@ -199,10 +210,13 @@ function loadEvent(content) {
             modal.find('#tag').addClass("btn btn-danger");
             modal.find('#tag').html("High");
         }
+        //If it is a task
         if (content.task == true){
+            //Show the task information and fill it with the value
             modal.find('#taskcompletedlabel').show();
             $('.modal-taskcompleted').show();
             $('.modal-taskcompleted').prop('checked', content.taskcompleted);
+            //When changed, fetch to change the value of the task
             $('#taskcompleted').on('change', function() {
                 if (this.checked){
                     fetch(`/task`, {
@@ -225,6 +239,7 @@ function loadEvent(content) {
                 }
             })
         } else {
+            //If it isn't a task, hide the task elements
             modal.find('.modal-taskcompleted').hide();
             modal.find('#taskcompletedlabel').hide();
         }
