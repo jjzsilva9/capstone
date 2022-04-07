@@ -188,25 +188,29 @@ def date(request):
         return HttpResponse(status=204)
 
 #View for creating, fetching or editing monthly notes
-#Not done yet but will be more notes
 @csrf_exempt
 def notes(request, date):
     if request.user.is_authenticated:
         newdate = datetime.datetime(int(date[:4]), int(date[4:])+1, 1, 0, 0, 0)
         print(newdate)
+        #If the client-side is pulling the notes for that month
         if request.method == "GET":
             try:
+                #If there are notes for this month, return them
                 month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
                     print(month.notes)
                     return JsonResponse(month.notes, safe=False)
             except:
+                #Otherwise, return a placeholder
                 print("Type some notes here...")
                 return JsonResponse("Type some notes here...", safe=False)
+        #If the user is saving notes
         elif request.method == "POST":
             data = json.loads(request.body)
             goals = data.get("goals")
             try:
+                #If notes for this month already exist, edit them
                 month = Note.objects.get(user=User.objects.get(id=request.user.id), month=newdate)
                 if month:
                     data = json.loads(request.body)
@@ -216,6 +220,7 @@ def notes(request, date):
                     note.notes = goals
                     note.save()
             except:
+                #Otherwise create a new notes object
                 note = Note.objects.create(user=User.objects.get(id=request.user.id), month=newdate, notes=goals)
                 note.save()
     return HttpResponse(status=204)
