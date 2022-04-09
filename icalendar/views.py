@@ -71,7 +71,10 @@ def register (request):
         
         #Ensure password matches confirmation
         if password != confirmation:
-            return render(request, "icalendar/register.html")
+            return render(request, "icalendar/register.html", {
+                "nbar": "register",
+                "message": "Passwords did not match."
+            })
 
         #Attempt to create new user
         try:
