@@ -7,7 +7,7 @@ import datetime
 from django.http.response import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.utils.timezone import make_aware
 from .models import User, Event, Note
 
 #Main view
@@ -117,8 +117,10 @@ def post(request):
         host = request.POST["host"]
         host = User.objects.get(id=host)
         #Format the starttime and endtime to the proper datetime objects
-        start_time = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(start_time[0:2]), int(start_time[3:5]))
-        end_time = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(end_time[0:2]), int(end_time[3:5]))
+        start_time = make_aware(datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), 
+        int(start_time[0:2]), int(start_time[3:5])))
+        end_time = make_aware(datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), 
+        int(end_time[0:2]), int(end_time[3:5])))
         #Create the event
         event = Event.objects.create(title=title, description=description, starttime=start_time, endtime=end_time, host=host, task=task, tag=tag)
         #Save it
@@ -145,8 +147,10 @@ def events(request, month):
             if event["host"] == user.username:
                 total.append(event)
             elif len(event["users"]):
-                if str(user.id) in event["users"][0]:
-                    total.append(event)
+                print(event["users"])
+                for shared_user in event["users"]:
+                    if str(user.id) in shared_user:
+                        total.append(event)
         #Return the list of events
         return JsonResponse(sorted(total, key=lambda d: d['starttime']), safe=False)
     #Return an empty list of events if not logged in
@@ -160,12 +164,9 @@ def task(request):
         event = Event.objects.get(id=data.get("post"))
         #Find out if the task is getting checked or unchecked
         if data["taskcompleted"]:
-            done = data.get("taskcompleted")
-            #Save it in the database
-            if done == True:
-                event.taskcompleted = True
-            else:
-                event.taskcompleted = False
+            event.taskcompleted = True
+        else:
+            event.taskcompleted = False
         event.save()
         return HttpResponse(status=204)
 

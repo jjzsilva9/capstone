@@ -163,6 +163,7 @@ function fetchEvents(date){
 function loadEvent(content) {
     const event = document.createElement("tr");
     event.className="event btn btn-secondary";
+    console.log(content.starttime)
     //Sets inner text to contain the starting time and the title
     event.innerHTML = `<div class="event-title text-left">${content.starttime.slice(11, 16)} ${content.title}</div>`;
     event.id = content.id;

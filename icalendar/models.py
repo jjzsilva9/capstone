@@ -1,6 +1,7 @@
 from django.db import models
 #Uses default Django User model
 from django.contrib.auth.models import User
+from django.utils.timezone import make_naive
 
 #Class for event and tasks
 class Event(models.Model):
@@ -23,8 +24,8 @@ class Event(models.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "starttime": self.starttime,
-            "endtime": self.endtime,
+            "starttime": make_naive(self.starttime),
+            "endtime": make_naive(self.endtime),
             "title": self.title,
             "description": self.description,
             "users": [f"{user.id}, {user.username}" for user in self.users.all()],
